@@ -6,11 +6,15 @@ package it.polito.tdp.bar;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.bar.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 public class FXMLController {
+	
+	private Model model;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -23,6 +27,15 @@ public class FXMLController {
 
     @FXML
     void handleSimula(ActionEvent event) {
+    	
+    	model.esegui();
+    	
+    	double per = (model.getInsoddisfatti()*100.00)/model.getClienti();
+    	
+    	txtResult.appendText("Numero di clienti: "+model.getClienti()+"\n");
+    	txtResult.appendText("Numero di clienti soddisfatti: "+model.getSoddisfatti()+"\n");
+    	txtResult.appendText("Numero di clienti insoddisfatti: "+model.getInsoddisfatti()+"\n");
+    	txtResult.appendText(String.format("Percentuale di insoddisfazione: %.2f",per)+"%\n\n");
 
     }
 
@@ -30,5 +43,9 @@ public class FXMLController {
     void initialize() {
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
 
+    }
+    
+    public void setModel(Model model) {
+    	this.model = model;
     }
 }
