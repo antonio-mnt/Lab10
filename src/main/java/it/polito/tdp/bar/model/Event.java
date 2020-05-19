@@ -8,23 +8,24 @@ public class Event implements Comparable<Event> {
 		ARRIVO_GRUPPO_CLIENTI, USCITA_GRUPPO_CLIENTI
 	}
 	
-	private LocalTime time;
+	//private LocalTime time;
+	private int time;
 	private EventType type;
 	private int n;
 	private int numTavolo;
 	
-	public Event(LocalTime time, EventType type) {
+	public Event(int time, EventType type) {
 		super();
 		this.time = time;
 		this.type = type;
 		this.numTavolo = 0;
 	}
 
-	public LocalTime getTime() {
+	public int getTime() {
 		return time;
 	}
 
-	public void setTime(LocalTime time) {
+	public void setTime(int time) {
 		this.time = time;
 	}
 
@@ -38,7 +39,12 @@ public class Event implements Comparable<Event> {
 
 	@Override
 	public int compareTo(Event other) {
-		return this.getTime().compareTo(other.time);
+		//return this.getTime().compareTo(other.time);
+		if(this.getTime()<=other.time) {
+			return -1;
+		}else {
+			return 1;
+		}
 	}
 
 	public int getN() {

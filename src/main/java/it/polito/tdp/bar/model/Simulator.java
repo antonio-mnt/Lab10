@@ -17,8 +17,10 @@ public class Simulator {
 	
 	// parametri di simulazione
 	private Map<Integer,Integer> tavoli = new TreeMap<>();
-	private Duration T_IN  = Duration.of(10, ChronoUnit.MINUTES);
-	private final LocalTime oraApertura = LocalTime.of(8, 00);
+	//private Duration T_IN  = Duration.of(10, ChronoUnit.MINUTES);
+	private int T_IN = 10;
+	//private final LocalTime oraApertura = LocalTime.of(8, 00);
+	private final int oraApertura = 0;
 	
 	private final int numEventi = 2000;
 	
@@ -42,7 +44,8 @@ public class Simulator {
 	public void setFrequenzaArrivi() {
 		double i = Math.random();
     	int x = (int) (i*10)+1;
-    	this.T_IN = Duration.of(x, ChronoUnit.MINUTES);
+    	//this.T_IN = Duration.of(x, ChronoUnit.MINUTES);
+    	this.T_IN = x;
 	}
 	
 	
@@ -64,19 +67,22 @@ public class Simulator {
 		// preparazione iniziale (mondo + coda eventi)
 		setTavoli();
 		tavoliRimasti = new TreeMap<>(tavoli);
+		//System.out.println(tavoliRimasti);//
 		this.clienti = 0;
 		this.soddisfatti = 0;
 		this.insoddisfatti = 0;
 		
 		this.queue.clear();
-		LocalTime orarioArrivo = this.oraApertura;
+		//LocalTime orarioArrivo = this.oraApertura;
+		int orarioArrivo = this.oraApertura;
 		//System.out.println(orarioArrivo+"");
 		for(int i = 0; i<=numEventi; i++) {
 			setFrequenzaArrivi();
-			orarioArrivo = orarioArrivo.plus(this.T_IN);
+			//orarioArrivo = orarioArrivo.plus(this.T_IN);
+			orarioArrivo = orarioArrivo + this.T_IN;
 			Event e = new Event(orarioArrivo,EventType.ARRIVO_GRUPPO_CLIENTI);
 			e.setN();
-			//System.out.println(e+" "+orarioArrivo+" "+this.T_IN);
+			//System.out.println(e+" "+orarioArrivo+" "+this.T_IN);//
 			queue.add(e);
 		}
 		
@@ -107,7 +113,7 @@ public class Simulator {
 					flag = true;
 					this.tavoliRimasti.replace(tav, this.tavoliRimasti.get(tav)-1);
 						
-					Event nuovo = new Event(e.getTime().plus(durata()),EventType.USCITA_GRUPPO_CLIENTI);
+					Event nuovo = new Event(e.getTime()+durata(),EventType.USCITA_GRUPPO_CLIENTI);
 					nuovo.setNumTavolo(tav);
 					this.queue.add(nuovo);
 					this.soddisfatti+=e.getN();
@@ -138,11 +144,12 @@ public class Simulator {
 	}
 	
 	
-	public Duration durata() {
+	public int durata() {
 		int i = (int) (Math.random()*100 + 1);
     	int j =  (int) (((i)/100.0 + 1)*60);
     	
-    	return Duration.of(j, ChronoUnit.MINUTES);
+    	//return Duration.of(j, ChronoUnit.MINUTES);
+    	return j;
 	}
 	
 	public boolean calcolaTolleranza() {
